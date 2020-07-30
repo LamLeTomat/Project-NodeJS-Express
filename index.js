@@ -1,5 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const low = require('lowdb')
+const FileSync = require('lowdb/adapters/FileSync')
+ 
+const adapter = new FileSync('db.json')
+const db = low(adapter)
+ 
+// Set some defaults
+db.defaults({ users: [] })
+  .write()
+
 const app = express();
 const port = 3001;
 
@@ -9,10 +19,6 @@ app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-
 
 app.listen(port, () => console.log(`App listening on port ${port}`));
 
-const users = [
-    {name: 'Lam', id : 1,},
-    {name : 'Quang', id : 2,}
-]
 
 //Template engine Pug
 app.set('view engine', 'pug');
@@ -27,7 +33,7 @@ app.get('/', (req, res) => {
 
 app.get('/users', (req, res) => {
     res.render('users/index', {
-        users: users
+        users: db.get('users').value()
     });
 });
 //route-Search_Page
@@ -46,7 +52,7 @@ app.get('/users/create', (req, res) => {
     res.render('users/create')
 });
 app.post('/users/create', (req, res) =>{
-    users.push(req.body);
+    db.get('users').push(req.body).write();
     //Tro ve trang users
     res.redirect('/users')
 })
