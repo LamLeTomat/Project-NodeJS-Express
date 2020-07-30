@@ -6,7 +6,11 @@ form(action="/users/search" method="GET")
 //- Loop
 ul
     each user in users 
-        li= user.name
+        li
+            span= user.name
+            span &nbsp;
+            a(href="/users/" + user.id ) view detail
+
 a(href="/users/create") Create user
 br
 a(href="/") Home

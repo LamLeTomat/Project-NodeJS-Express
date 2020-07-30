@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const low = require('lowdb')
+const low = require('lowdb');
+const shortid = require('shortid');
+
 const FileSync = require('lowdb/adapters/FileSync')
  
 const adapter = new FileSync('db.json')
@@ -51,7 +53,19 @@ app.get('/users/search', (req, res) => {
 app.get('/users/create', (req, res) => {
     res.render('users/create')
 });
+
+//route Detail user page
+app.get('/users/:id', (req, res) => {
+    const id = req.params.id;
+    const user = db.get('users').find({ id: id}).value();
+    res.render('users/view', {
+        user: user
+    });
+});
+
 app.post('/users/create', (req, res) =>{
+
+    req.body.id = shortid.generate();
     db.get('users').push(req.body).write();
     //Tro ve trang users
     res.redirect('/users')
