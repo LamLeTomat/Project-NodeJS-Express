@@ -1,16 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const low = require('lowdb');
-const shortid = require('shortid');
-
-const FileSync = require('lowdb/adapters/FileSync')
- 
-const adapter = new FileSync('db.json')
-const db = low(adapter)
- 
-// Set some defaults
-db.defaults({ users: [] })
-  .write()
+const userRoutes = require('./routes/route.users');
+const productRoutes = require('./routes/route.product');
 
 const app = express();
 const port = 3001;
@@ -33,41 +24,8 @@ app.get('/', (req, res) => {
     });
 });
 
-app.get('/users', (req, res) => {
-    res.render('users/index', {
-        users: db.get('users').value()
-    });
-});
-//route-Search_Page
-app.get('/users/search', (req, res) => {
-    const q = req.query.q;
-    const matchedUsers = users.filter(user => {
-        return user.name.toLowerCase().indexOf(q.toLowerCase()) !== -1;
-    })
-    res.render('users/index', {
-        users: matchedUsers
-    });
-})
+app.use('/users', userRoutes)
+app.use('/products', productRoutes)
 
-//route Create user Page
-app.get('/users/create', (req, res) => {
-    res.render('users/create')
-});
 
-//route Detail user page
-app.get('/users/:id', (req, res) => {
-    const id = req.params.id;
-    const user = db.get('users').find({ id: id}).value();
-    res.render('users/view', {
-        user: user
-    });
-});
-
-app.post('/users/create', (req, res) =>{
-
-    req.body.id = shortid.generate();
-    db.get('users').push(req.body).write();
-    //Tro ve trang users
-    res.redirect('/users')
-})
 
