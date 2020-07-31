@@ -1,16 +1,19 @@
-h1 User list
-form(action="/users/search" method="GET")
-    input(type="text", name="q")
-    button Search
+extends ../layouts/common.pug
 
-//- Loop
-ul
-    each user in users 
-        li
-            span= user.name
-            span &nbsp;
-            a(href="/users/" + user.id ) view detail
+block content
+    h1 User list
+    form(action="/users/search" method="GET",class="d-flex")
+        input(type="text", name="q", class="form-control")
+        button(class="btn btn-primary") Search
 
-a(href="/users/create") Create user
-br
-a(href="/") Home
+    //- Loop
+    ul
+        each user in users 
+            li
+                span= user.name
+                span &nbsp;
+                a(href="/users/" + user.id ) view detail
+
+    a(href="/users/create") Create user
+    br
+    a(href="/") Home
