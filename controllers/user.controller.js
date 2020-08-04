@@ -21,6 +21,29 @@ module.exports.create = (req, res) => {
     res.render('users/create')
 };
 
+module.exports.postCreate = (req, res) =>{
+
+    req.body.id = shortid.generate();
+    
+    const errors = [];
+    if(!req.body.name){
+        errors.push('Name is required');
+    };
+    if(!req.body.phone){
+        errors.push('Phone is required')
+    };
+    if(errors.length > 0){
+        res.render('users/create', {
+            errors: errors,
+            values: req.body
+        })
+        return;
+    }
+    db.get('users').push(req.body).write();
+    //Tro ve trang users
+    res.redirect('/users')
+};
+
 module.exports.getIdUser = (req, res) => {
     const id = req.params.id;
     const user = db.get('users').find({ id: id}).value();
@@ -29,10 +52,3 @@ module.exports.getIdUser = (req, res) => {
     });
 };
 
-module.exports.postCreate = (req, res) =>{
-
-    req.body.id = shortid.generate();
-    db.get('users').push(req.body).write();
-    //Tro ve trang users
-    res.redirect('/users')
-};

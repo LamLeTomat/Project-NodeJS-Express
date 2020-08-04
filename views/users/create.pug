@@ -2,9 +2,16 @@ extends ../layouts/common.pug
 
 block content
     h1 Create User
+    if errors
+        each error in errors
 
-    form(action="/users/create" method="POST", class="d-flex")
-        lable Name 
-        input(name = "name", type="text", class="form-control")
-        button(class="btn btn-primary") Create
+            .alert.alert-danger= error
+    form(action="/users/create" method="POST")
+        .form-group
+            lable(for="name") Name 
+            input#name.form-control(name = "name", type="text", value=values ? values.name : "")
+        .form-group
+            lable(for="phone") Phone 
+            input#phone.form-control(name = "phone", type="text", value=values ? values.phone : "")
+        button.btn.btn-primary Create
     
