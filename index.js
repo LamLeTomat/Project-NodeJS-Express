@@ -1,7 +1,10 @@
 const express = require('express');
 const userRoutes = require('./routes/route.users');
 const productRoutes = require('./routes/route.product');
+const authRoutes = require('./routes/auth.route');
 const { static } = require('express');
+const cookieParser = require('cookie-parser');
+const authMiddleWare = require('./middlewares/auth.middlewares');
 
 const app = express();
 const port = 3001;
@@ -10,12 +13,14 @@ const port = 3001;
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+app.use(cookieParser());
 
 //static route
 app.use(express.static('public'))
 
-app.use('/users', userRoutes)
-app.use('/products', productRoutes)
+app.use('/users',authMiddleWare.requireAuth, userRoutes)
+app.use('/products',authMiddleWare.requireAuth, productRoutes)
+app.use('/',authRoutes)
 
 app.listen(port, () => console.log(`App listening on port ${port}`));
 
