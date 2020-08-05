@@ -6,5 +6,7 @@ const db = low(adapter);
 // Set some defaults
 db.defaults({ users: [] })
   .write()
+db.defaults({ products: []})
+  .write()
 
 module.exports = db;

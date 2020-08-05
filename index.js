@@ -30,7 +30,7 @@ app.set('view engine', 'pug');
 app.set('views', './views');
 
 //route
-app.get('/', (req, res) => {
+app.get('/',authMiddleWare.requireAuth, (req, res) => {
     res.render('index', {
         name: "Lam ngon zai"
     });

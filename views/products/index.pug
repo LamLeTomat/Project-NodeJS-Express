@@ -2,3 +2,13 @@ extends ../layouts/common.pug
 
 block content
     h1 Product Page
+    .card-columns    
+        each product in products
+            .card(style='width: 20rem;')
+                img.card-img-top(src= product.image, alt='Card image cap')
+                .card-body
+                    h5.card-title= product.name
+                    p.card-text= product.description
+                    a.btn.btn-primary(href='#') Add to card
+
+
