@@ -10,3 +10,5 @@ module.exports.index = (req, res) => {
         products: db.get('products').value().slice(start, end)
     });
 };
+
+module.exports
